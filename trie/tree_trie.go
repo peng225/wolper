@@ -1,5 +1,7 @@
 package trie
 
+import "strings"
+
 type TreeTrie struct {
 	c        byte
 	terminal bool
@@ -21,14 +23,16 @@ func (treeTrie *TreeTrie) Query(key string, include string, exclude string, curr
 	currentNode := treeTrie.child
 	result := make([]string, 0)
 	for currentNode != nil {
-		if firstChar == '.' {
-			current += string(currentNode.c)
-			result = append(result, currentNode.Query(key, include, exclude, current)...)
-			current = current[:len(current)-1]
-		} else if currentNode.c == firstChar {
-			current += string(currentNode.c)
-			result = append(result, currentNode.Query(key, include, exclude, current)...)
-			break
+		if !strings.Contains(exclude, string(currentNode.c)) {
+			if firstChar == '.' {
+				current += string(currentNode.c)
+				result = append(result, currentNode.Query(key, include, exclude, current)...)
+				current = current[:len(current)-1]
+			} else if currentNode.c == firstChar {
+				current += string(currentNode.c)
+				result = append(result, currentNode.Query(key, include, exclude, current)...)
+				break
+			}
 		}
 		currentNode = currentNode.sibling
 	}
