@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package wolper;
+
+option go_package = "pb/";
+
+// import "google/protobuf/timestamp.proto";
+
+service WolperService {
+  rpc Query (SearchRequest) returns (SearchResponse) {}
+}
+
+message SearchRequest {
+  string key = 1;
+  string include = 2;
+  string exclude = 3;
+}
+
+message SearchResponse {
+  repeated string words = 1;
+}
