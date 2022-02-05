@@ -1,48 +1,49 @@
 package service
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 	"time"
-    "github.com/peng225/wolper/pb"
-    "google.golang.org/grpc"
+
+	"github.com/peng225/wolper/pb"
+	"google.golang.org/grpc"
 )
 
-func ClientQuery(addrAndPort, include, exclude, fixed string) {
-    fmt.Printf("service.ClientQeury called (addrAndPort = %v).\n", addrAndPort)
-    conn, err := grpc.Dial(
-        addrAndPort,
-        grpc.WithInsecure(),
-        grpc.WithBlock(),
-    )
-    if err != nil {
-        fmt.Println("Connection failed.")
-        return
-    }
-    defer conn.Close()
-    fmt.Println("Connection succeeded.")
+func ClientQuery(addrAndPort, include, exclude, key string) {
+	fmt.Printf("service.ClientQeury called (addrAndPort = %v).\n", addrAndPort)
+	conn, err := grpc.Dial(
+		addrAndPort,
+		grpc.WithInsecure(),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		fmt.Println("Connection failed.")
+		return
+	}
+	defer conn.Close()
+	fmt.Println("Connection succeeded.")
 
-    ctx, cancel := context.WithTimeout(
-        context.Background(),
-        time.Second,
-    )
-    defer cancel()
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		time.Second,
+	)
+	defer cancel()
 
-    client := pb.NewWolperServiceClient(conn)
-    searchRequest := pb.SearchRequest{
-        Key: fixed,
-        Include: include,
-        Exclude: exclude,
-    }
+	client := pb.NewWolperServiceClient(conn)
+	searchRequest := pb.SearchRequest{
+		Key:     key,
+		Include: include,
+		Exclude: exclude,
+	}
 
-    result, err := client.Query(ctx, &searchRequest)
-    if err != nil {
-        fmt.Println("Request failed.")
-        return
-    }
+	result, err := client.Query(ctx, &searchRequest)
+	if err != nil {
+		fmt.Println("Request failed.")
+		return
+	}
 
-    words := result.Words
-    for _, word := range words {
-        fmt.Println(word)
-    }
+	words := result.Words
+	for _, word := range words {
+		fmt.Println(word)
+	}
 }

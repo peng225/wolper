@@ -7,49 +7,50 @@ package cmd
 import (
 	"fmt"
 	"net"
+
 	"github.com/peng225/wolper/service"
 
-    "google.golang.org/grpc"
-    "google.golang.org/grpc/reflection"
-    "github.com/peng225/wolper/pb"
+	"github.com/peng225/wolper/pb"
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "Run a server for n-character words querying.",
-	Long: `Run a server for n-character words querying.
+	Short: "Run a server for words querying.",
+	Long: `Run a server for words querying.
 This sub-command should be executed before query sub command is used.`,
 	Run: func(cmd *cobra.Command, args []string) {
-        input, err := cmd.Flags().GetString("input")
-        if err != nil {
-            panic(err)
-        } else if input == "" {
-            panic("The input must not be empty.")
-        }
-        fmt.Println("input:", input)
+		input, err := cmd.Flags().GetString("input")
+		if err != nil {
+			panic(err)
+		} else if input == "" {
+			panic("The input must not be empty.")
+		}
+		fmt.Println("input:", input)
 
-        port, err := cmd.Flags().GetInt("port")
-        if err != nil {
-            panic(err)
-        } else if port <= 0 {
-            panic("The port must be a positive number.")
-        }
-        fmt.Println("port:", port)
+		port, err := cmd.Flags().GetInt("port")
+		if err != nil {
+			panic(err)
+		} else if port <= 0 {
+			panic("The port must be a positive number.")
+		}
+		fmt.Println("port:", port)
 
-        listenPort, err := net.Listen("tcp4", fmt.Sprintf(":%d", port))
-        if err != nil {
-            fmt.Println("failed to listen: %v", err)
-        }
+		listenPort, err := net.Listen("tcp4", fmt.Sprintf(":%d", port))
+		if err != nil {
+			fmt.Println("failed to listen: %v", err)
+		}
 
-        registrar := grpc.NewServer()
-        wssi := service.WolperServiceServerImpl{}
-        wssi.Init(input)
-        pb.RegisterWolperServiceServer(registrar, &wssi)
-        reflection.Register(registrar)
-        fmt.Println("Service started.")
-        registrar.Serve(listenPort)
+		registrar := grpc.NewServer()
+		wssi := service.WolperServiceServerImpl{}
+		wssi.Init(input)
+		pb.RegisterWolperServiceServer(registrar, &wssi)
+		reflection.Register(registrar)
+		fmt.Println("Service started.")
+		registrar.Serve(listenPort)
 	},
 }
 
