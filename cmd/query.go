@@ -7,7 +7,8 @@ package cmd
 import (
 	"fmt"
 	"strconv"
-    "github.com/peng225/wolper/service"
+
+	"github.com/peng225/wolper/service"
 
 	"github.com/spf13/cobra"
 )
@@ -15,45 +16,45 @@ import (
 // queryCmd represents the query command
 var queryCmd = &cobra.Command{
 	Use:   "query",
-	Short: "hogehoge",
-	Long: `fugafuga`,
+	Short: "Run the client for words querying.",
+	Long:  `Run the client for words querying.`,
 	Run: func(cmd *cobra.Command, args []string) {
-        address, err := cmd.Flags().GetString("address")
-        if err != nil {
-            panic(err)
-        }
-        // TODO: address format check
-        fmt.Println("address:", address)
+		address, err := cmd.Flags().GetString("address")
+		if err != nil {
+			panic(err)
+		}
+		// TODO: address format check
+		fmt.Println("address:", address)
 
-        port, err := cmd.Flags().GetInt("port")
-        if err != nil {
-            panic(err)
-        } else if port <= 0 {
-            panic("The port must be a positive number.")
-        }
-        fmt.Println("port:", port)
+		port, err := cmd.Flags().GetInt("port")
+		if err != nil {
+			panic(err)
+		} else if port <= 0 {
+			panic("The port must be a positive number.")
+		}
+		fmt.Println("port:", port)
 
-        include, err := cmd.Flags().GetString("include")
-        if err != nil {
-            panic(err)
-        }
-        fmt.Println("include:", include)
+		include, err := cmd.Flags().GetString("include")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("include:", include)
 
-        exclude, err := cmd.Flags().GetString("exclude")
-        if err != nil {
-            panic(err)
-        }
-        fmt.Println("exclude:", exclude)
+		exclude, err := cmd.Flags().GetString("exclude")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("exclude:", exclude)
 
-        fixed, err := cmd.Flags().GetString("fixed")
-        if err != nil {
-            panic(err)
-        }
-        fmt.Println("fixed:", fixed)
+		key, err := cmd.Flags().GetString("key")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("key:", key)
 
-        service.ClientQuery(address + ":" + strconv.Itoa(port),
-            include, exclude, fixed)
-    },
+		service.ClientQuery(address+":"+strconv.Itoa(port),
+			include, exclude, key)
+	},
 }
 
 func init() {
@@ -72,5 +73,5 @@ func init() {
 	queryCmd.Flags().IntP("port", "p", 8080, "The port number to connect")
 	queryCmd.Flags().StringP("include", "i", "", "Included characters (can contain duplicated characters)")
 	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters (can contain duplicated characters)")
-	queryCmd.Flags().StringP("fixed", "f", "", "Fiexed pattern (eg. \"sp...\" can match strings like \"spawn\", \"speak\", \"spray\", and so on)")
+	queryCmd.Flags().StringP("key", "k", "", "Key of the query (eg. \"sp...\" can match strings like \"spawn\", \"speak\", \"spray\", and so on)")
 }
