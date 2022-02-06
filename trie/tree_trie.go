@@ -81,6 +81,8 @@ func (treeTrie *TreeTrie) Add(key string) {
 
 	if treeTrie.child == nil {
 		treeTrie.child = &TreeTrie{firstChar, false, nil, nil}
+	} else if treeTrie.child.c > firstChar {
+		treeTrie.child = &TreeTrie{firstChar, false, treeTrie.child, nil}
 	}
 
 	currentNode := treeTrie.child
@@ -90,13 +92,12 @@ func (treeTrie *TreeTrie) Add(key string) {
 			return
 		} else if currentNode.sibling == nil {
 			currentNode.sibling = &TreeTrie{firstChar, false, nil, nil}
-		} else if firstChar > currentNode.sibling.c {
+		} else if firstChar < currentNode.sibling.c {
 			prevSibling := currentNode.sibling
 			currentNode.sibling = &TreeTrie{firstChar, false, prevSibling, nil}
 		}
 		currentNode = currentNode.sibling
 	}
-
 }
 
 func (treeTrie *TreeTrie) Delete(key string) {
