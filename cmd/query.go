@@ -16,8 +16,8 @@ import (
 // queryCmd represents the query command
 var queryCmd = &cobra.Command{
 	Use:   "query",
-	Short: "Run the client for words querying.",
-	Long:  `Run the client for words querying.`,
+	Short: "Run a client for words querying.",
+	Long:  `Run a client for words querying.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		address, err := cmd.Flags().GetString("address")
 		if err != nil {

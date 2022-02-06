@@ -10,7 +10,6 @@ import (
 )
 
 func ClientQuery(addrAndPort, include, exclude, key string) {
-	fmt.Printf("service.ClientQeury called (addrAndPort = %v).\n", addrAndPort)
 	conn, err := grpc.Dial(
 		addrAndPort,
 		grpc.WithInsecure(),
