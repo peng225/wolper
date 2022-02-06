@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/peng225/wolper/dictionary"
 
 	"github.com/spf13/cobra"
@@ -14,28 +15,28 @@ import (
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
 	Use:   "build",
-	Short: "Build a n-character dictionary for querying.",
-	Long: `Build a n-word dictionary for querying.
+	Short: "Build a dictionary for querying.",
+	Long: `Build a dictionary for querying.
 This sub-command should be executed before server sub command is used.`,
 	Run: func(cmd *cobra.Command, args []string) {
-        input, err := cmd.Flags().GetString("input")
-        if err != nil {
-            panic(err)
-        } else if input == "" {
-            panic("The input must not be empty.")
-        }
-        fmt.Println("input:", input)
+		input, err := cmd.Flags().GetString("input")
+		if err != nil {
+			panic(err)
+		} else if input == "" {
+			panic("The input must not be empty.")
+		}
+		fmt.Println("input:", input)
 
-        output, err := cmd.Flags().GetString("output")
-        if err != nil {
-            panic(err)
-        } else if input == "" {
-            panic("The output must not be empty.")
-        }
-        fmt.Println("output:", output)
+		output, err := cmd.Flags().GetString("output")
+		if err != nil {
+			panic(err)
+		} else if input == "" {
+			panic("The output must not be empty.")
+		}
+		fmt.Println("output:", output)
 
-        var dict dictionary.Dictionary
-        dict.Build(input, output)
+		var dict dictionary.Dictionary
+		dict.Build(input, output)
 	},
 }
 
