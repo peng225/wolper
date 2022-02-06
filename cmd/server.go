@@ -41,7 +41,7 @@ This sub-command should be executed before query sub command is used.`,
 
 		listenPort, err := net.Listen("tcp4", fmt.Sprintf(":%d", port))
 		if err != nil {
-			fmt.Println("failed to listen: %v", err)
+			fmt.Println("failed to listen:", err)
 		}
 
 		registrar := grpc.NewServer()
