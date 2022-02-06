@@ -42,17 +42,12 @@ func (treeTrie *TreeTrie) query(key string, include string, exclude string, curr
 		if !strings.Contains(exclude, string(currentNode.c)) {
 			newInclude := include
 			if firstChar == '.' {
-				foundInclude := false
 				if strings.Contains(include, string(currentNode.c)) {
-					foundInclude = true
 					newInclude = string(deleteChar([]byte(include), currentNode.c))
 				}
 				current += string(currentNode.c)
 				result = append(result, currentNode.query(key, newInclude, exclude, current)...)
 				current = current[:len(current)-1]
-				if foundInclude {
-					include += string(currentNode.c)
-				}
 			} else if currentNode.c == firstChar {
 				if strings.Contains(include, string(currentNode.c)) {
 					newInclude = string(deleteChar([]byte(include), currentNode.c))
