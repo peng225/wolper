@@ -138,6 +138,14 @@ func (suite *TreeTrieSuite) TestTwoWordsSharingPrefixWithInclude() {
 	suite.Equal([]string{"power"}, suite.tr.Query("po...", "opw", ""))
 }
 
+func (suite *TreeTrieSuite) TestTwoWordsSharingPrefixWithDuplicatedInclude() {
+	suite.tr.Add("skill")
+	suite.tr.Add("skull")
+	suite.Equal([]string{"skill"}, suite.tr.Query("skill", "ll", ""))
+	suite.Equal([]string{"skull"}, suite.tr.Query("skull", "ll", ""))
+	suite.Equal([]string{"skill", "skull"}, suite.tr.Query("sk...", "ll", ""))
+}
+
 func (suite *TreeTrieSuite) TestOneWordWithExclude() {
 	suite.tr.Add("hello")
 	suite.Equal([]string{"hello"}, suite.tr.Query("hello", "", "x"))
