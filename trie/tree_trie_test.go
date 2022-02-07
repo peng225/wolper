@@ -186,6 +186,16 @@ func (suite *TreeTrieSuite) TestTwoWordsContainedOutOfOrder() {
 	suite.Equal([]string{"text"}, suite.tr.Query("text", "", ""))
 }
 
+func (suite *TreeTrieSuite) TestThreeWordsDifferentLength() {
+	suite.tr.Add("skll")
+	suite.tr.Add("skill")
+	suite.tr.Add("skull")
+	suite.Equal([]string{"skll"}, suite.tr.Query("skll", "ll", ""))
+	suite.Equal([]string{"skill"}, suite.tr.Query("skill", "ll", ""))
+	suite.Equal([]string{"skull"}, suite.tr.Query("skull", "ll", ""))
+	suite.Equal([]string{"skill", "skull"}, suite.tr.Query("sk...", "ll", ""))
+}
+
 /*******************************/
 /* Run tests                   */
 /*******************************/
