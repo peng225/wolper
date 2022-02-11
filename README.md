@@ -27,9 +27,8 @@ This is a helper program for solving [wordle](https://www.powerlanguage.co.uk/wo
    include: 
    exclude: powghtl
    key: fi.er
-   service.ClientQeury called (addrAndPort = localhost:8080).
    Connection succeeded.
-   fixer
-   finer
    fiber
+   finer
+   fixer
    ```
