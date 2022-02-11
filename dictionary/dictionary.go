@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"unicode"
 
 	"github.com/peng225/wolper/trie"
 )
@@ -15,23 +16,12 @@ type Dictionary struct {
 }
 
 func (dict *Dictionary) cleanUp(text string) string {
-	retText := strings.Replace(text, ".", " ", -1)
-	retText = strings.Replace(retText, "?", " ", -1)
-	retText = strings.Replace(retText, "!", " ", -1)
-	retText = strings.Replace(retText, "#", " ", -1)
-	retText = strings.Replace(retText, "$", " ", -1)
-	retText = strings.Replace(retText, "&", " ", -1)
-	retText = strings.Replace(retText, "(", " ", -1)
-	retText = strings.Replace(retText, ")", " ", -1)
-	retText = strings.Replace(retText, ",", " ", -1)
-	retText = strings.Replace(retText, ":", " ", -1)
-	retText = strings.Replace(retText, ";", " ", -1)
-	retText = strings.Replace(retText, "\"", " ", -1)
-	retText = strings.Replace(retText, "'", " ", -1)
-	retText = strings.Replace(retText, "~", " ", -1)
-	retText = strings.Replace(retText, "=", " ", -1)
-	retText = strings.Replace(retText, "\n", "", -1)
-	retText = strings.ToLower(retText)
+	retText := strings.ToLower(text)
+	for _, v := range text {
+		if !unicode.IsLower(v) {
+			retText = strings.Replace(retText, string(v), " ", -1)
+		}
+	}
 	return retText
 }
 
