@@ -52,8 +52,11 @@ var queryCmd = &cobra.Command{
 		}
 		fmt.Println("key:", key)
 
-		service.ClientQuery(address+":"+strconv.Itoa(port),
+		words := service.ClientQuery(address+":"+strconv.Itoa(port),
 			include, exclude, key)
+		for _, word := range words {
+			fmt.Println(word)
+		}
 	},
 }
 
