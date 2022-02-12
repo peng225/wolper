@@ -9,15 +9,16 @@ import (
 	"google.golang.org/grpc"
 )
 
-func ClientQuery(addrAndPort, include, exclude, key string) {
+func ClientQuery(addrAndPort, include, exclude, key string) []string {
 	conn, err := grpc.Dial(
 		addrAndPort,
 		grpc.WithInsecure(),
 		grpc.WithBlock(),
+		grpc.WithTimeout(5*time.Second),
 	)
 	if err != nil {
 		fmt.Println("Connection failed.")
-		return
+		return nil
 	}
 	defer conn.Close()
 	fmt.Println("Connection succeeded.")
@@ -38,11 +39,8 @@ func ClientQuery(addrAndPort, include, exclude, key string) {
 	result, err := client.Query(ctx, &searchRequest)
 	if err != nil {
 		fmt.Println("Request failed.")
-		return
+		return nil
 	}
 
-	words := result.Words
-	for _, word := range words {
-		fmt.Println(word)
-	}
+	return result.Words
 }
