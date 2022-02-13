@@ -25,27 +25,34 @@ func (dict *Dictionary) cleanUp(text string) string {
 	return retText
 }
 
-func (dict *Dictionary) Build(inputDir string, outputFile string) {
+func (dict *Dictionary) mergeMaps(map1, map2 map[string]bool) map[string]bool {
+	result := map[string]bool{}
+
+	for k, v := range map1 {
+		result[k] = v
+	}
+	for k, v := range map2 {
+		result[k] = v
+	}
+	return result
+}
+
+func (dict *Dictionary) wordScan(inputDir string) map[string]bool {
 	files, err := ioutil.ReadDir(inputDir)
 	if err != nil {
 		panic(err)
 	}
-
-	ofp, err := os.Create(outputFile)
-	if err != nil {
-		panic(err)
-	}
-	defer ofp.Close()
-
 	words := make(map[string]bool)
 	for _, file := range files {
-		if file.IsDir() {
-			continue
-		}
-
 		fileFullPath := inputDir + "/" + file.Name()
 		// allow input both form of "path" and "path/" for inputDir
 		fileFullPath = strings.Replace(fileFullPath, "//", "/", -1)
+
+		if file.IsDir() {
+			words = dict.mergeMaps(words, dict.wordScan(fileFullPath))
+			continue
+		}
+
 		fmt.Println(fileFullPath)
 		ifp, err := os.Open(fileFullPath)
 		if err != nil {
@@ -64,11 +71,22 @@ func (dict *Dictionary) Build(inputDir string, outputFile string) {
 			}
 		}
 	}
+	return words
+}
+
+func (dict *Dictionary) Build(inputDir string, outputFile string) {
+	words := dict.wordScan(inputDir)
+
+	ofp, err := os.Create(outputFile)
+	if err != nil {
+		panic(err)
+	}
+	defer ofp.Close()
 
 	writer := bufio.NewWriter(ofp)
 	const FLUSH_THRESHOLD = 8192
 	for word, _ := range words {
-		_, err = writer.WriteString(word + "\n")
+		_, err = writer.WriteString(word + string('\n'))
 		if err != nil {
 			panic(err)
 		}

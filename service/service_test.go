@@ -67,6 +67,10 @@ var _ = Describe("Service", func() {
 				words = service.ClientQuery("localhost:"+strconv.Itoa(port),
 					"a", "x", ".r..e")
 				Expect(findWord("crane", words)).To(BeTrue())
+
+				words = service.ClientQuery("localhost:"+strconv.Itoa(port),
+					"", "", ".oda.")
+				Expect(findWord("today", words)).To(BeTrue())
 			})
 		})
 	})
