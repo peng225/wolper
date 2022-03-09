@@ -3,8 +3,8 @@ package dictionary
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 	"unicode"
 
@@ -38,7 +38,7 @@ func (dict *Dictionary) mergeMaps(map1, map2 map[string]bool) map[string]bool {
 }
 
 func (dict *Dictionary) wordScan(inputDir string) map[string]bool {
-	files, err := ioutil.ReadDir(inputDir)
+	files, err := os.ReadDir(inputDir)
 	if err != nil {
 		panic(err)
 	}
