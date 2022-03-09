@@ -33,7 +33,7 @@ func WordScan(dict *Dictionary, inputDir string) map[string]bool {
 /*******************************/
 /* Test cases                  */
 /*******************************/
-func (suite *DictionarySuite) TestCealnupA() {
+func (suite *DictionarySuite) TestCleanUp() {
 	suite.Equal("abcde", CleanUp(&suite.dict, "abcde"))
 	suite.Equal("abcde", CleanUp(&suite.dict, "Abcde"))
 	suite.Equal("a b c d e f g", CleanUp(&suite.dict, "A;b.c,d!e2F\"g"))
