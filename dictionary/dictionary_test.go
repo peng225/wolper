@@ -50,6 +50,16 @@ func (suite *DictionarySuite) TestWordScan() {
 	suite.NotContains(words, "java")
 }
 
+func (suite *DictionarySuite) TestWordScanWithSlash() {
+	words := WordScan(&suite.dict, "test_input/")
+	suite.Contains(words, "hello")
+	suite.Contains(words, "world")
+	suite.Contains(words, "i")
+	suite.Contains(words, "love")
+	suite.Contains(words, "golang")
+	suite.NotContains(words, "java")
+}
+
 /*******************************/
 /* Run tests                   */
 /*******************************/
