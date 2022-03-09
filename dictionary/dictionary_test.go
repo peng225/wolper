@@ -33,7 +33,7 @@ func WordScan(dict *Dictionary, inputDir string) map[string]bool {
 /*******************************/
 /* Test cases                  */
 /*******************************/
-func (suite *DictionarySuite) TestCealnupA() {
+func (suite *DictionarySuite) TestCleanUp() {
 	suite.Equal("abcde", CleanUp(&suite.dict, "abcde"))
 	suite.Equal("abcde", CleanUp(&suite.dict, "Abcde"))
 	suite.Equal("a b c d e f g", CleanUp(&suite.dict, "A;b.c,d!e2F\"g"))
@@ -42,6 +42,16 @@ func (suite *DictionarySuite) TestCealnupA() {
 
 func (suite *DictionarySuite) TestWordScan() {
 	words := WordScan(&suite.dict, "test_input")
+	suite.Contains(words, "hello")
+	suite.Contains(words, "world")
+	suite.Contains(words, "i")
+	suite.Contains(words, "love")
+	suite.Contains(words, "golang")
+	suite.NotContains(words, "java")
+}
+
+func (suite *DictionarySuite) TestWordScanWithSlash() {
+	words := WordScan(&suite.dict, "test_input/")
 	suite.Contains(words, "hello")
 	suite.Contains(words, "world")
 	suite.Contains(words, "i")
