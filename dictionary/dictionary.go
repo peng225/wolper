@@ -44,9 +44,7 @@ func (dict *Dictionary) wordScan(inputDir string) map[string]bool {
 	}
 	words := make(map[string]bool)
 	for _, file := range files {
-		fileFullPath := inputDir + "/" + file.Name()
-		// allow input both form of "path" and "path/" for inputDir
-		fileFullPath = strings.Replace(fileFullPath, "//", "/", -1)
+		fileFullPath := path.Join(inputDir, file.Name())
 
 		if file.IsDir() {
 			words = dict.mergeMaps(words, dict.wordScan(fileFullPath))
