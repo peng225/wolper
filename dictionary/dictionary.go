@@ -3,8 +3,8 @@ package dictionary
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 	"unicode"
 
@@ -38,15 +38,13 @@ func (dict *Dictionary) mergeMaps(map1, map2 map[string]bool) map[string]bool {
 }
 
 func (dict *Dictionary) wordScan(inputDir string) map[string]bool {
-	files, err := ioutil.ReadDir(inputDir)
+	files, err := os.ReadDir(inputDir)
 	if err != nil {
 		panic(err)
 	}
 	words := make(map[string]bool)
 	for _, file := range files {
-		fileFullPath := inputDir + "/" + file.Name()
-		// allow input both form of "path" and "path/" for inputDir
-		fileFullPath = strings.Replace(fileFullPath, "//", "/", -1)
+		fileFullPath := path.Join(inputDir, file.Name())
 
 		if file.IsDir() {
 			words = dict.mergeMaps(words, dict.wordScan(fileFullPath))
