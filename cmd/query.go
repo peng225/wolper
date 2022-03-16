@@ -34,6 +34,12 @@ var queryCmd = &cobra.Command{
 		}
 		fmt.Println("port:", port)
 
+		key, err := cmd.Flags().GetString("key")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("key:", key)
+
 		include, err := cmd.Flags().GetString("include")
 		if err != nil {
 			panic(err)
@@ -46,12 +52,6 @@ var queryCmd = &cobra.Command{
 		}
 		fmt.Println("exclude:", exclude)
 
-		key, err := cmd.Flags().GetString("key")
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("key:", key)
-
 		uniq, err := cmd.Flags().GetBool("uniq")
 		if err != nil {
 			panic(err)
@@ -59,7 +59,7 @@ var queryCmd = &cobra.Command{
 		fmt.Println("uniq:", uniq)
 
 		words := service.ClientQuery(address+":"+strconv.Itoa(port),
-			include, exclude, key, uniq)
+			key, include, exclude, uniq)
 		for _, word := range words {
 			fmt.Println(word)
 		}
@@ -80,8 +80,8 @@ func init() {
 	// queryCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	queryCmd.Flags().StringP("address", "a", "localhost", "The IP address to connect")
 	queryCmd.Flags().IntP("port", "p", 8080, "The port number to connect")
+	queryCmd.Flags().StringP("key", "k", "", "Key of the query (eg. \"sp...\" can match strings like \"spawn\", \"speak\", \"spray\", and so on)")
 	queryCmd.Flags().StringP("include", "i", "", "Included characters (can contain duplicated characters)")
 	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters")
-	queryCmd.Flags().StringP("key", "k", "", "Key of the query (eg. \"sp...\" can match strings like \"spawn\", \"speak\", \"spray\", and so on)")
 	queryCmd.Flags().BoolP("uniq", "u", false, "Allow words only consisting of unique characters")
 }
