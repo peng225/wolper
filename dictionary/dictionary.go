@@ -109,6 +109,6 @@ func (dict *Dictionary) Load(inputFile string) {
 	}
 }
 
-func (dict *Dictionary) Query(key string, include string, exclude string) []string {
-	return dict.tr.Query(key, include, exclude)
+func (dict *Dictionary) Query(key string, include string, exclude string, uniq bool) []string {
+	return dict.tr.Query(key, include, exclude, uniq)
 }

@@ -52,8 +52,14 @@ var queryCmd = &cobra.Command{
 		}
 		fmt.Println("key:", key)
 
+		uniq, err := cmd.Flags().GetBool("uniq")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("uniq:", uniq)
+
 		words := service.ClientQuery(address+":"+strconv.Itoa(port),
-			include, exclude, key)
+			include, exclude, key, uniq)
 		for _, word := range words {
 			fmt.Println(word)
 		}
@@ -75,6 +81,7 @@ func init() {
 	queryCmd.Flags().StringP("address", "a", "localhost", "The IP address to connect")
 	queryCmd.Flags().IntP("port", "p", 8080, "The port number to connect")
 	queryCmd.Flags().StringP("include", "i", "", "Included characters (can contain duplicated characters)")
-	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters (can contain duplicated characters)")
+	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters")
 	queryCmd.Flags().StringP("key", "k", "", "Key of the query (eg. \"sp...\" can match strings like \"spawn\", \"speak\", \"spray\", and so on)")
+	queryCmd.Flags().BoolP("uniq", "u", false, "Allow words only consisting of unique characters")
 }

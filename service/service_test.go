@@ -60,16 +60,16 @@ var _ = Describe("Service", func() {
 
 				// Start client
 				words := service.ClientQuery("localhost:"+strconv.Itoa(port),
-					"", "", "crane")
+					"", "", "crane", false)
 				Expect(findWord("crane", words)).To(BeTrue())
 				Expect(findWord("hello", words)).To(BeFalse())
 
 				words = service.ClientQuery("localhost:"+strconv.Itoa(port),
-					"a", "x", ".r..e")
+					"a", "x", ".r..e", false)
 				Expect(findWord("crane", words)).To(BeTrue())
 
 				words = service.ClientQuery("localhost:"+strconv.Itoa(port),
-					"", "", ".oda.")
+					"", "", ".oda.", false)
 				Expect(findWord("today", words)).To(BeTrue())
 			})
 		})
@@ -98,7 +98,7 @@ var _ = Describe("Service", func() {
 
 				// Start client
 				words := service.ClientQuery("localhost:"+strconv.Itoa(clientPort),
-					"", "", "crane")
+					"", "", "crane", false)
 
 				Expect(words).To(BeNil())
 			})

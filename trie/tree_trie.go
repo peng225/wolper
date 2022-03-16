@@ -25,7 +25,7 @@ func deleteChar(s []byte, c byte) []byte {
 	}
 }
 
-func (treeTrie *TreeTrie) query(key string, include string, exclude string, current string) []string {
+func (treeTrie *TreeTrie) query(key string, include string, exclude string, uniq bool, current string) []string {
 	if key == "" {
 		if treeTrie.terminal && include == "" {
 			return []string{current}
@@ -39,21 +39,22 @@ func (treeTrie *TreeTrie) query(key string, include string, exclude string, curr
 	currentNode := treeTrie.child
 	result := make([]string, 0)
 	for currentNode != nil {
-		if !strings.Contains(exclude, string(currentNode.c)) {
+		if !strings.Contains(exclude, string(currentNode.c)) &&
+			!(uniq && strings.Contains(current, string(currentNode.c))) {
 			newInclude := include
 			if firstChar == '.' {
 				if strings.Contains(include, string(currentNode.c)) {
 					newInclude = string(deleteChar([]byte(include), currentNode.c))
 				}
 				current += string(currentNode.c)
-				result = append(result, currentNode.query(key, newInclude, exclude, current)...)
+				result = append(result, currentNode.query(key, newInclude, exclude, uniq, current)...)
 				current = current[:len(current)-1]
 			} else if currentNode.c == firstChar {
 				if strings.Contains(include, string(currentNode.c)) {
 					newInclude = string(deleteChar([]byte(include), currentNode.c))
 				}
 				current += string(currentNode.c)
-				result = append(result, currentNode.query(key, newInclude, exclude, current)...)
+				result = append(result, currentNode.query(key, newInclude, exclude, uniq, current)...)
 				break
 			}
 		}
@@ -62,8 +63,8 @@ func (treeTrie *TreeTrie) query(key string, include string, exclude string, curr
 	return result
 }
 
-func (treeTrie *TreeTrie) Query(key string, include string, exclude string) []string {
-	return treeTrie.query(key, include, exclude, "")
+func (treeTrie *TreeTrie) Query(key string, include string, exclude string, uniq bool) []string {
+	return treeTrie.query(key, include, exclude, uniq, "")
 }
 
 func (treeTrie *TreeTrie) Add(key string) {

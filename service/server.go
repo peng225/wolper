@@ -17,8 +17,9 @@ func (wssi *WolperServiceServerImpl) Init(input string) {
 }
 
 func (wssi *WolperServiceServerImpl) Query(ctx context.Context, sreq *pb.SearchRequest) (*pb.SearchResponse, error) {
-	fmt.Printf("Query requested. (key = \"%v\", include = \"%v\", exclude = \"%v\")\n", sreq.Key, sreq.Include, sreq.Exclude)
+	fmt.Printf("Query requested. (key = \"%v\", include = \"%v\", exclude = \"%v\", uniq = %v)\n",
+		sreq.Key, sreq.Include, sreq.Exclude, sreq.Uniq)
 	var result pb.SearchResponse
-	result.Words = wssi.dict.Query(sreq.Key, sreq.Include, sreq.Exclude)
+	result.Words = wssi.dict.Query(sreq.Key, sreq.Include, sreq.Exclude, sreq.Uniq)
 	return &result, nil
 }
