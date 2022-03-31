@@ -40,7 +40,7 @@ var _ = Describe("Service", func() {
 
 	Describe("Client and server communicate successfully", func() {
 		Context("With proper settings", func() {
-			port := 8080
+			port := 8081
 			It("should get the correct result", func() {
 				test_dict_name := "test_dict.txt"
 				dict.Build("test_input", test_dict_name)
@@ -77,8 +77,8 @@ var _ = Describe("Service", func() {
 
 	Describe("Client and server fails to communicate", func() {
 		Context("With wrong port number", func() {
-			serverPort := 8080
-			clientPort := 8081
+			serverPort := 8081
+			clientPort := 8082
 			It("should fail to connect", func() {
 				test_dict_name := "test_dict.txt"
 				dict.Build("test_input", test_dict_name)
