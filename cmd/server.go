@@ -66,6 +66,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// serverCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	serverCmd.Flags().IntP("port", "p", 8080, "The port number to be opend")
+	serverCmd.Flags().IntP("port", "p", 8081, "The port number to be opend")
 	serverCmd.Flags().StringP("input", "i", "dict.txt", "The path to the dictionary file")
 }
