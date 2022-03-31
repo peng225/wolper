@@ -79,7 +79,7 @@ func init() {
 	// is called directly, e.g.:
 	// queryCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	queryCmd.Flags().StringP("address", "a", "localhost", "The IP address to connect")
-	queryCmd.Flags().IntP("port", "p", 8080, "The port number to connect")
+	queryCmd.Flags().IntP("port", "p", 8081, "The port number to connect")
 	queryCmd.Flags().StringP("key", "k", "", "Key of the query (eg. \"sp...\" can match strings like \"spawn\", \"speak\", \"spray\", and so on)")
 	queryCmd.Flags().StringP("include", "i", "", "Included characters (can contain duplicated characters)")
 	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters")
