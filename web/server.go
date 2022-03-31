@@ -33,7 +33,7 @@ func Start(port int, addrAndPort string) {
 		for _, word := range words {
 			responseBody += word + "\n"
 		}
-		ctx.String(200, responseBody)
+		ctx.String(http.StatusOK, responseBody)
 	})
 
 	err := router.Run("localhost:" + strconv.Itoa(port))
