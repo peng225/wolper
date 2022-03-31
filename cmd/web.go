@@ -41,7 +41,7 @@ var webCmd = &cobra.Command{
 		// TODO: address format check
 		fmt.Println("address:", address)
 
-		web.Start(port, address+":"+strconv.Itoa(wolper_port))
+		web.Start(port, address+":"+strconv.Itoa(wolper_port), "web")
 	},
 }
 

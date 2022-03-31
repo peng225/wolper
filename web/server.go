@@ -2,16 +2,17 @@ package web
 
 import (
 	"net/http"
+	"path"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/peng225/wolper/service"
 )
 
-func Start(port int, addrAndPort string) {
+func Start(port int, addrAndPort, modulePath string) {
 	router := gin.Default()
 
-	router.LoadHTMLFiles("web/html/index.html")
+	router.LoadHTMLFiles(path.Join(modulePath, "html/index.html"))
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "index.html", gin.H{})
