@@ -1,12 +1,10 @@
 # Stage 1
 FROM golang:1.17 AS builder
 
-### Set the environment variables to meet your needs. ###
 # input directory path
-ENV INPUT=
+ARG INPUT
 # tag to be built
-ENV TAG=
-#########################################################
+ARG TAG
 
 ENV DICT=dict.txt
 WORKDIR /go/src/github.com/
@@ -19,13 +17,9 @@ RUN CGO_ENABLED=0 go build -o wolper && ./wolper build -o ${DICT}
 # Stage 2
 FROM alpine:latest
 
-### Set your TCP port to `PORT` variable. ###
-ENV PORT=8080
-#############################################
-
 ENV DICT=dict.txt
 WORKDIR /root/
 COPY --from=builder /go/src/github.com/wolper/wolper ./
 COPY --from=builder /go/src/github.com/wolper/${DICT} ./
-EXPOSE ${PORT}
-CMD ["sh", "-c", "./wolper server -p ${PORT} -i ${DICT}"]
+COPY web/html web/html
+ENTRYPOINT [ "./wolper" ]
