@@ -1,6 +1,6 @@
 BUILD_TARGET = wolper
 IMAGE_NAME ?= wolper
-INPUT ?= input
+INPUT ?= test_input
 TAG ?= v0.3.1
 
 $(BUILD_TARGET):
