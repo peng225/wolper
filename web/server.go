@@ -37,7 +37,7 @@ func Start(port int, addrAndPort, modulePath string) {
 		ctx.String(http.StatusOK, responseBody)
 	})
 
-	err := router.Run("localhost:" + strconv.Itoa(port))
+	err := router.Run("0.0.0.0:" + strconv.Itoa(port))
 	if err != nil {
 		panic("Failed to start server.")
 	}
