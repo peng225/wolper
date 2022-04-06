@@ -1,5 +1,5 @@
 BUILD_TARGET = wolper
-IMAGE_NAME ?= wolper
+IMAGE_NAME ?= ghcr.io/peng225/wolper
 
 $(BUILD_TARGET):
 	CGO_ENABLED=0 go build -o $@ -v
