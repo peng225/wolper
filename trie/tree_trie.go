@@ -1,28 +1,16 @@
 package trie
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/peng225/wolper/util"
+)
 
 type TreeTrie struct {
 	c        byte
 	terminal bool
 	sibling  *TreeTrie
 	child    *TreeTrie
-}
-
-func deleteChar(s []byte, c byte) []byte {
-	foundIndex := -1
-	for i, v := range s {
-		if v == c {
-			foundIndex = i
-			break
-		}
-	}
-	if foundIndex == -1 {
-		return s
-	} else {
-		s[foundIndex] = s[len(s)-1]
-		return s[:len(s)-1]
-	}
 }
 
 func (treeTrie *TreeTrie) query(key string, include string, exclude string, uniq bool, current string) []string {
@@ -44,14 +32,14 @@ func (treeTrie *TreeTrie) query(key string, include string, exclude string, uniq
 			newInclude := include
 			if firstChar == '.' {
 				if strings.Contains(include, string(currentNode.c)) {
-					newInclude = string(deleteChar([]byte(include), currentNode.c))
+					newInclude = string(util.DeleteChar([]byte(include), currentNode.c))
 				}
 				current += string(currentNode.c)
 				result = append(result, currentNode.query(key, newInclude, exclude, uniq, current)...)
 				current = current[:len(current)-1]
 			} else if currentNode.c == firstChar {
 				if strings.Contains(include, string(currentNode.c)) {
-					newInclude = string(deleteChar([]byte(include), currentNode.c))
+					newInclude = string(util.DeleteChar([]byte(include), currentNode.c))
 				}
 				current += string(currentNode.c)
 				result = append(result, currentNode.query(key, newInclude, exclude, uniq, current)...)
