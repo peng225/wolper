@@ -63,6 +63,6 @@ func (suite *DictionarySuite) TestWordScanWithSlash() {
 /*******************************/
 /* Run tests                   */
 /*******************************/
-func TestTreeTrieSuite(t *testing.T) {
+func TestDictionarySuite(t *testing.T) {
 	suite.Run(t, new(DictionarySuite))
 }
