@@ -90,5 +90,5 @@ func init() {
 	queryCmd.Flags().StringP("include", "i", "", "Included characters (can contain duplicated characters)")
 	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters")
 	queryCmd.Flags().BoolP("uniq", "u", false, "Allow words only consisting of unique characters")
-	queryCmd.Flags().BoolP("entsort", "e", false, "Sort the resulting words according to the entropy.")
+	queryCmd.Flags().BoolP("entsort", "", false, "Sort the resulting words according to the entropy.")
 }
