@@ -41,7 +41,7 @@ func getBucketIndex(target, answer string) int {
 		panic("len(target) != len(answer)")
 	}
 
-	colorPattern := make([]Color, 5)
+	colorPattern := make([]Color, len(target))
 	// Search for GREEN positions
 	for i := 0; i < len(target); i++ {
 		if target[i] == answer[i] {

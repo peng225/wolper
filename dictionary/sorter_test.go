@@ -47,6 +47,14 @@ func (suite *SorterSuite) TestGetBucketIndex() {
 	target = "bbbcd"
 	colorPattern = []Color{YELLOW, GRAY, GREEN, YELLOW, GREEN}
 	suite.Equal(convToBucketIndex(colorPattern), getBucketIndex(target, "acbbd"))
+
+	target = "abc"
+	colorPattern = []Color{GREEN, YELLOW, GRAY}
+	suite.Equal(convToBucketIndex(colorPattern), getBucketIndex(target, "adb"))
+
+	target = "abcdef"
+	colorPattern = []Color{GREEN, GREEN, YELLOW, YELLOW, YELLOW, GRAY}
+	suite.Equal(convToBucketIndex(colorPattern), getBucketIndex(target, "abgcde"))
 }
 
 func (suite *SorterSuite) TestSortWithEntropy() {
