@@ -22,6 +22,7 @@ func Start(port int, addrAndPort, modulePath string) {
 		key := ctx.Query("key")
 		include := ctx.Query("include")
 		exclude := ctx.Query("exclude")
+		posExclude := ctx.Query("position exclude")
 		uniqStr := ctx.Query("unique")
 		entropySortStr := ctx.Query("entropy sort")
 		uniq := false
@@ -33,7 +34,7 @@ func Start(port int, addrAndPort, modulePath string) {
 			entropySort = true
 		}
 		words := service.ClientQuery(addrAndPort,
-			key, include, exclude, uniq, entropySort)
+			key, include, exclude, posExclude, uniq, entropySort)
 		ctx.Header("Content-Type", "text/html; charset=UTF-8")
 		responseBody := ""
 		if len(words) == 0 {

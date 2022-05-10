@@ -96,6 +96,11 @@ var _ = Describe("Web interface", func() {
 				url = root_url + "?key=.oda.&include=&exclude="
 				words = throwQuery(url)
 				Expect(findWord("today", words)).To(BeTrue())
+
+				url = root_url + "?key=....e&include=&exclude=&position%20exclude=::a::"
+				words = throwQuery(url)
+				Expect(findWord("write", words)).To(BeTrue())
+				Expect(findWord("crane", words)).To(BeFalse())
 			})
 		})
 	})
