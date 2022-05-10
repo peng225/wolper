@@ -109,8 +109,15 @@ func (dict *Dictionary) Load(inputFile string) {
 	}
 }
 
-func (dict *Dictionary) Query(key string, include string, exclude string, uniq, entropySort bool) []string {
-	words := dict.tr.Query(key, include, exclude, uniq)
+func (dict *Dictionary) Query(key, include, exclude, posExclude string, uniq, entropySort bool) []string {
+	posExcludeList := make([]string, len(key))
+	if posExclude != "" {
+		posExcludeList = strings.Split(posExclude, ":")
+		if len(posExcludeList) != len(key) {
+			return nil
+		}
+	}
+	words := dict.tr.Query(key, include, exclude, posExcludeList, uniq)
 	if entropySort {
 		sortWithEntropy(words)
 	}

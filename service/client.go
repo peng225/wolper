@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func ClientQuery(addrAndPort, key, include, exclude string, uniq, entropySort bool) []string {
+func ClientQuery(addrAndPort, key, include, exclude, posExclude string, uniq, entropySort bool) []string {
 	conn, err := grpc.Dial(
 		addrAndPort,
 		grpc.WithInsecure(),
@@ -34,6 +34,7 @@ func ClientQuery(addrAndPort, key, include, exclude string, uniq, entropySort bo
 		Key:         key,
 		Include:     include,
 		Exclude:     exclude,
+		PosExclude:  posExclude,
 		Uniq:        uniq,
 		EntropySort: entropySort,
 	}

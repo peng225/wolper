@@ -13,7 +13,7 @@ type TreeTrie struct {
 	child    *TreeTrie
 }
 
-func (treeTrie *TreeTrie) query(key string, include string, exclude string, uniq bool, current string) []string {
+func (treeTrie *TreeTrie) query(key, include, exclude string, posExcludeList []string, uniq bool, current string) []string {
 	if key == "" {
 		if treeTrie.terminal && include == "" {
 			return []string{current}
@@ -25,24 +25,27 @@ func (treeTrie *TreeTrie) query(key string, include string, exclude string, uniq
 	firstChar := key[0]
 	key = key[1:]
 	currentNode := treeTrie.child
+	posExclude := posExcludeList[0]
+	posExcludeList = posExcludeList[1:]
 	result := make([]string, 0)
 	for currentNode != nil {
 		if !strings.Contains(exclude, string(currentNode.c)) &&
-			!(uniq && strings.Contains(current, string(currentNode.c))) {
+			!(uniq && strings.Contains(current, string(currentNode.c))) &&
+			!strings.Contains(posExclude, string(currentNode.c)) {
 			newInclude := include
 			if firstChar == '.' {
 				if strings.Contains(include, string(currentNode.c)) {
 					newInclude = string(util.DeleteChar([]byte(include), currentNode.c))
 				}
 				current += string(currentNode.c)
-				result = append(result, currentNode.query(key, newInclude, exclude, uniq, current)...)
+				result = append(result, currentNode.query(key, newInclude, exclude, posExcludeList, uniq, current)...)
 				current = current[:len(current)-1]
 			} else if currentNode.c == firstChar {
 				if strings.Contains(include, string(currentNode.c)) {
 					newInclude = string(util.DeleteChar([]byte(include), currentNode.c))
 				}
 				current += string(currentNode.c)
-				result = append(result, currentNode.query(key, newInclude, exclude, uniq, current)...)
+				result = append(result, currentNode.query(key, newInclude, exclude, posExcludeList, uniq, current)...)
 				break
 			}
 		}
@@ -51,8 +54,8 @@ func (treeTrie *TreeTrie) query(key string, include string, exclude string, uniq
 	return result
 }
 
-func (treeTrie *TreeTrie) Query(key string, include string, exclude string, uniq bool) []string {
-	return treeTrie.query(key, include, exclude, uniq, "")
+func (treeTrie *TreeTrie) Query(key, include, exclude string, posExcludeList []string, uniq bool) []string {
+	return treeTrie.query(key, include, exclude, posExcludeList, uniq, "")
 }
 
 func (treeTrie *TreeTrie) Add(key string) {

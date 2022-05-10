@@ -52,6 +52,12 @@ var queryCmd = &cobra.Command{
 		}
 		fmt.Println("exclude:", exclude)
 
+		posExclude, err := cmd.Flags().GetString("pos_exclude")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("posExclude:", posExclude)
+
 		uniq, err := cmd.Flags().GetBool("uniq")
 		if err != nil {
 			panic(err)
@@ -65,7 +71,7 @@ var queryCmd = &cobra.Command{
 		fmt.Println("entsort:", entsort)
 
 		words := service.ClientQuery(address+":"+strconv.Itoa(port),
-			key, include, exclude, uniq, entsort)
+			key, include, exclude, posExclude, uniq, entsort)
 		for _, word := range words {
 			fmt.Println(word)
 		}
@@ -89,6 +95,7 @@ func init() {
 	queryCmd.Flags().StringP("key", "k", "", "Key of the query (eg. \"sp...\" can match strings like \"spawn\", \"speak\", \"spray\", and so on)")
 	queryCmd.Flags().StringP("include", "i", "", "Included characters (can contain duplicated characters)")
 	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters")
+	queryCmd.Flags().StringP("pos_exclude", "", "", "Excluded characters for each position")
 	queryCmd.Flags().BoolP("uniq", "u", false, "Allow words only consisting of unique characters")
-	queryCmd.Flags().BoolP("entsort", "", false, "Sort the resulting words according to the entropy.")
+	queryCmd.Flags().BoolP("entsort", "", false, "Sort the resulting words according to the entropy")
 }
