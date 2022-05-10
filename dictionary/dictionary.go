@@ -109,8 +109,10 @@ func (dict *Dictionary) Load(inputFile string) {
 	}
 }
 
-func (dict *Dictionary) Query(key string, include string, exclude string, uniq bool) []string {
+func (dict *Dictionary) Query(key string, include string, exclude string, uniq, entropySort bool) []string {
 	words := dict.tr.Query(key, include, exclude, uniq)
-	sortWithEntropy(words)
+	if entropySort {
+		sortWithEntropy(words)
+	}
 	return words
 }

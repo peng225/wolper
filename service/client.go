@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func ClientQuery(addrAndPort, key, include, exclude string, uniq bool) []string {
+func ClientQuery(addrAndPort, key, include, exclude string, uniq, entropySort bool) []string {
 	conn, err := grpc.Dial(
 		addrAndPort,
 		grpc.WithInsecure(),
@@ -31,10 +31,11 @@ func ClientQuery(addrAndPort, key, include, exclude string, uniq bool) []string 
 
 	client := pb.NewWolperServiceClient(conn)
 	searchRequest := pb.SearchRequest{
-		Key:     key,
-		Include: include,
-		Exclude: exclude,
-		Uniq:    uniq,
+		Key:         key,
+		Include:     include,
+		Exclude:     exclude,
+		Uniq:        uniq,
+		EntropySort: entropySort,
 	}
 
 	result, err := client.Query(ctx, &searchRequest)

@@ -15,6 +15,7 @@ message SearchRequest {
   string include = 2;
   string exclude = 3;
   bool uniq = 4;
+  bool entropySort = 5;
 }
 
 message SearchResponse {

@@ -58,8 +58,14 @@ var queryCmd = &cobra.Command{
 		}
 		fmt.Println("uniq:", uniq)
 
+		entsort, err := cmd.Flags().GetBool("entsort")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("entsort:", entsort)
+
 		words := service.ClientQuery(address+":"+strconv.Itoa(port),
-			key, include, exclude, uniq)
+			key, include, exclude, uniq, entsort)
 		for _, word := range words {
 			fmt.Println(word)
 		}
@@ -84,4 +90,5 @@ func init() {
 	queryCmd.Flags().StringP("include", "i", "", "Included characters (can contain duplicated characters)")
 	queryCmd.Flags().StringP("exclude", "e", "", "Excluded characters")
 	queryCmd.Flags().BoolP("uniq", "u", false, "Allow words only consisting of unique characters")
+	queryCmd.Flags().BoolP("entsort", "e", false, "Sort the resulting words according to the entropy.")
 }
