@@ -23,16 +23,25 @@ func Start(port int, addrAndPort, modulePath string) {
 		include := ctx.Query("include")
 		exclude := ctx.Query("exclude")
 		uniqStr := ctx.Query("unique")
+		entropySortStr := ctx.Query("entropy sort")
 		uniq := false
 		if uniqStr == "on" {
 			uniq = true
 		}
+		entropySort := false
+		if entropySortStr == "on" {
+			entropySort = true
+		}
 		words := service.ClientQuery(addrAndPort,
-			key, include, exclude, uniq)
+			key, include, exclude, uniq, entropySort)
 		ctx.Header("Content-Type", "text/html; charset=UTF-8")
 		responseBody := ""
-		for _, word := range words {
-			responseBody += word + "\n"
+		if len(words) == 0 {
+			responseBody = "No results found."
+		} else {
+			for _, word := range words {
+				responseBody += word + "\n"
+			}
 		}
 		ctx.String(http.StatusOK, responseBody)
 	})
