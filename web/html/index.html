@@ -24,6 +24,7 @@
   <script>
     document.querySelector("#query").onsubmit = (e) => {
       e.preventDefault()
+      document.getElementById("result").innerText = ""
       const form_data = new FormData(e.target)
       const url_search_params = new URLSearchParams(form_data)
       console.log("params:" + url_search_params);
