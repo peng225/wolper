@@ -100,7 +100,7 @@ spec:
       initContainers:
         - name: get-dict
           image: busybox:stable
-          command: ["sh", "-c", "wget https://raw.githubusercontent.com/peng225/wolper/main/sample_dict && mv data1 /dict/dict.txt"]
+          command: ["sh", "-c", "wget https://raw.githubusercontent.com/peng225/wolper/main/sample_dict && mv sample_dict /dict/dict.txt"]
           volumeMounts:
             - name: dict
               mountPath: "/dict"
