@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.web.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "wolper.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.web.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "wolper.webSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "wolper.webSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          args: ["web", "-p", $(WEB_SERVER_PORT), "-a", "wolper-app-service.wolper.svc.cluster.local", "--wolper_port", $(APP_SERVER_PORT)]
+          env:
+            - name: WEB_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.cm.name }}
+                  key: webServerPort
+            - name: APP_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.cm.name }}
+                  key: appServerPort
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.cm.webServerPort }}
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.app.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "wolper.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.app.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "wolper.appSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "wolper.appSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: get-dict
+          image: busybox:stable
+          command: ["sh", "-c", "wget https://raw.githubusercontent.com/peng225/wolper/main/sample_dict && mv data1 /dict/dict.txt"]
+          volumeMounts:
+            - name: dict
+              mountPath: "/dict"
+              readOnly: false
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          args: ["server", "-p", $(APP_SERVER_PORT), "-i", "/dict/dict.txt"]
+          env:
+            - name: APP_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.cm.name }}
+                  key: appServerPort
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.cm.appServerPort }}
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          volumeMounts:
+          - name: dict
+            mountPath: "/dict"
+            readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: dict
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
