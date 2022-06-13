@@ -100,7 +100,13 @@ spec:
       initContainers:
         - name: get-dict
           image: busybox:stable
-          command: ["sh", "-c", "wget https://raw.githubusercontent.com/peng225/wolper/main/sample_dict && mv sample_dict /dict/dict.txt"]
+          command: ["sh", "-c", "wget -O /dict/dict.txt $(DICT_FILE_URL)"]
+          env:
+            - name: DICT_FILE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.cm.name }}
+                  key: dictFileURL
           volumeMounts:
             - name: dict
               mountPath: "/dict"
