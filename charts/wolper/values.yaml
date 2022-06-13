@@ -73,3 +73,4 @@ cm:
   name: wolper-config
   webServerPort: 8080
   appServerPort: 8081
+  dictFileURL: https://raw.githubusercontent.com/peng225/wolper/main/sample_dict

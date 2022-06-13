@@ -6,3 +6,4 @@ metadata:
 data:
   webServerPort: "{{ .Values.cm.webServerPort }}"
   appServerPort: "{{ .Values.cm.appServerPort }}"
+  dictFileURL: "{{ .Values.cm.dictFileURL }}"
