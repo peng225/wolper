@@ -4,6 +4,10 @@
 
 This is a helper program for solving [wordle](https://www.powerlanguage.co.uk/wordle/).
 
+## System overview
+
+![system overview](docs/images/system_overview.png)
+
 ## How to build
 
 Just execute the `make` command.
