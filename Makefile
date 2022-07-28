@@ -12,7 +12,7 @@ proto:
 
 .PHONY: test
 test: $(BUILD_TARGET)
-	go test -v ./...
+	go test -v `go list ./... | grep -v helm_test`
 
 .PHONY: image
 image:
