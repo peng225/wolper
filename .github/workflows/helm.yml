@@ -1,4 +1,4 @@
-name: Go
+name: Helm
 
 on:
   push:
@@ -11,9 +11,11 @@ on:
     paths-ignore:
     - '**.md'
     - '**.png'
+env:
+  HELM_TEST_DIR: helm_test
 
 jobs:
-  build:
+  helm-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,9 +24,12 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: 1.17
+    
+    - name: Setup helm test
+      run: make setup -C $HELM_TEST_DIR
 
-    - name: Build
-      run: make
+    - name: Run helm test
+      run: make test -C $HELM_TEST_DIR
 
-    - name: Test
-      run: make test
+    - name: Tear down helm test
+      run: make clean -C $HELM_TEST_DIR

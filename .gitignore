@@ -16,3 +16,5 @@
 # vendor/
 
 *.txt
+wolper
+helm_test/bin
