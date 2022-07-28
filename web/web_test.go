@@ -57,7 +57,7 @@ var _ = Describe("Web interface", func() {
 		Context("With proper settings", func() {
 			port := 8090
 			wolper_port := 8091
-			It("should get the correct result", func() {
+			It("Should get the correct result", func() {
 				test_dict_name := "test_dict.txt"
 				dict.Build("test_input", test_dict_name)
 				// Start wolper server
