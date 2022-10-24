@@ -17,4 +17,5 @@
 
 *.txt
 wolper
+!wolper/
 helm_test/bin
