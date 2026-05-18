@@ -1,54 +1,69 @@
 package web
 
 import (
+	"log"
+	"net"
 	"net/http"
 	"path"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/peng225/wolper/service"
 )
 
-func Start(port int, addrAndPort, modulePath string) {
-	router := gin.Default()
+type WebServer struct {
+	port              int
+	backendAddr       string
+	backendPort       int
+	staticContentPath string
+}
 
-	router.LoadHTMLFiles(path.Join(modulePath, "html/index.html"))
-
-	router.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "index.html", gin.H{})
-	})
-
-	router.GET("/query", func(ctx *gin.Context) {
-		key := ctx.Query("key")
-		include := ctx.Query("include")
-		exclude := ctx.Query("exclude")
-		posExclude := ctx.Query("position exclude")
-		uniqStr := ctx.Query("unique")
-		entropySortStr := ctx.Query("entropy sort")
-		uniq := false
-		if uniqStr == "on" {
-			uniq = true
-		}
-		entropySort := false
-		if entropySortStr == "on" {
-			entropySort = true
-		}
-		words := service.ClientQuery(addrAndPort,
-			key, include, exclude, posExclude, uniq, entropySort)
-		ctx.Header("Content-Type", "text/html; charset=UTF-8")
-		responseBody := ""
-		if len(words) == 0 {
-			responseBody = "No results found."
-		} else {
-			for _, word := range words {
-				responseBody += word + "\n"
-			}
-		}
-		ctx.String(http.StatusOK, responseBody)
-	})
-
-	err := router.Run("0.0.0.0:" + strconv.Itoa(port))
-	if err != nil {
-		panic("Failed to start server.")
+func NewWebServer(
+	port int, backendAddr string, backendPort int, staticContentPath string,
+) *WebServer {
+	return &WebServer{
+		port:              port,
+		backendAddr:       backendAddr,
+		backendPort:       backendPort,
+		staticContentPath: staticContentPath,
 	}
+}
+
+func (ws *WebServer) Start() {
+	http.HandleFunc("/", ws.indexHandler)
+	http.HandleFunc("/query", ws.queryHandler)
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(ws.port), nil))
+}
+
+func (ws *WebServer) indexHandler(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, path.Join(ws.staticContentPath, "index.html"))
+}
+
+func (ws *WebServer) queryHandler(w http.ResponseWriter, req *http.Request) {
+	query := req.URL.Query()
+	key := query.Get("key")
+	include := query.Get("include")
+	exclude := query.Get("exclude")
+	posExclude := query.Get("position exclude")
+	uniqStr := query.Get("unique")
+	entropySortStr := query.Get("entropy sort")
+	uniq := false
+	if uniqStr == "on" {
+		uniq = true
+	}
+	entropySort := false
+	if entropySortStr == "on" {
+		entropySort = true
+	}
+	words := service.ClientQuery(net.JoinHostPort(ws.backendAddr, strconv.Itoa(ws.backendPort)),
+		key, include, exclude, posExclude, uniq, entropySort)
+	responseBody := ""
+	if len(words) == 0 {
+		responseBody = "No results found."
+	} else {
+		for _, word := range words {
+			responseBody += word + "\n"
+		}
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(responseBody))
 }

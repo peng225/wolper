@@ -1,12 +1,10 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/peng225/wolper/web"
 	"github.com/spf13/cobra"
@@ -41,7 +39,8 @@ var webCmd = &cobra.Command{
 		// TODO: address format check
 		fmt.Println("address:", address)
 
-		web.Start(port, address+":"+strconv.Itoa(wolper_port), "web")
+		s := web.NewWebServer(port, address, wolper_port, "web/html")
+		s.Start()
 	},
 }
 
