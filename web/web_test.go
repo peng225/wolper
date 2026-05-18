@@ -76,7 +76,8 @@ var _ = Describe("Web interface", func() {
 
 				// Start web server
 				go func() {
-					web.Start(port, "localhost:"+strconv.Itoa(wolper_port), ".")
+					s := web.NewWebServer(port, "localhost", wolper_port, "./html")
+					s.Start()
 				}()
 
 				time.Sleep(time.Second * 1)

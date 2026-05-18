@@ -1,5 +1,5 @@
-KIND_VERSION = v0.14.0
-HELM_VERSION = v3.9.2
+KIND_VERSION = v0.31.0
+HELM_VERSION = v3.21.0
 KIND = bin/kind
 HELM = bin/helm
 
